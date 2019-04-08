@@ -7,9 +7,10 @@
                 "targets": {
                     "node": "current",
                     "esmodules": true
+                    // "browsers": ["last 2 versions", "ie >= 9"]
                 }
             }
         ], 
-        "@babel/react",
+        "@babel/preset-react",
     ]
 }

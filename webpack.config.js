@@ -1,9 +1,11 @@
 const path = require('path')
 const webpack = require('webpack')
 const nodeExternals = require('webpack-node-externals')
+const HtmlWebpackPlugin = require('html-webpack-plugin'); //installed via npm
 
 const browserConfig = {
-  mode: 'production',
+  mode: 'development',
+  target: 'web',
   entry: './src/browser/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -31,28 +33,35 @@ const browserConfig = {
 }
 
 const serverConfig = {
-  mode: 'production',
+  mode: 'development',
   entry: ['./src/server/index.js'],
   target: 'node',
+  node: {
+    __dirname: false
+  },
   externals: [nodeExternals()],
   output: {
-    path: __dirname,
+    path: path.resolve(__dirname, 'dist'),
     filename: 'server.js',
-    publicPath: '/'
+    publicPath: '/public/'
   },
   devtool: 'source-map',
   resolve: {
-    modules: ['node_modules', 'src'],
-    extensions: ['.js', '.jsx']
+    modules: ['node_modules', path.resolve(__dirname, 'src')],
+    extensions:  ['.js', '.jsx']
   },
   module: {
     rules: [
       { 
         test: /\.(js|jsx)$/,
+        include: [
+          path.resolve(__dirname, "./src")
+        ],
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader'
-        }
+        loader: 'babel-loader',
+        options: {
+          presets: ["es2015"]
+        },
       }
     ]
   },
